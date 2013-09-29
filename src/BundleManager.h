@@ -20,7 +20,9 @@ enum BuildType
     BUILD_TYPE_STABLE
 };
 
-
+/**
+ * @brief The BundleBuild class represents a build available for a specific ROM
+ */
 class BundleBuild
 {
 public:

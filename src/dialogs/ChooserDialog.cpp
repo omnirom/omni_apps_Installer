@@ -13,6 +13,12 @@ ChooserDialog::ChooserDialog(QWidget *parent) :
     ui->setupUi(this);
 
     BundleManager::getDefault()->fetchBundle("derp");
+
+    Bundle* currBundle = BundleManager::getDefault()->getCurrentBundle();
+
+    ui->lblBundle->setText(tr("Bundle provided by %1 (%2)")
+                           .arg(currBundle->getProviderName())
+                           .arg(currBundle->getPublicUrl()));
 }
 //----------------------------------------
 ChooserDialog::~ChooserDialog()

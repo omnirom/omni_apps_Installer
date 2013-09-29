@@ -53,6 +53,8 @@ void BundleManager::parseBundle(const QString &data)
 
     mCurrentBundle = new Bundle(j_root["name"].toString(), j_root["url"].toString(),
             j_root["schemeVersion"].toInt());
+
+
 }
 //-----------------------------------------
 Bundle* BundleManager::getCurrentBundle() const

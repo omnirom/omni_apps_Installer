@@ -194,10 +194,13 @@ color: #33B5E5;</string>
      </property>
     </spacer>
    </item>
-   <item row="5" column="0">
-    <widget class="QLabel" name="label_2">
+   <item row="5" column="0" colspan="3">
+    <widget class="QLabel" name="lblBundle">
      <property name="text">
       <string>Bundle: ...</string>
+     </property>
+     <property name="margin">
+      <number>9</number>
      </property>
     </widget>
    </item>

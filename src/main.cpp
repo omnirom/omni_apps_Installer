@@ -2,10 +2,17 @@
 #include <QApplication>
 #include <QFile>
 #include <QMessageBox>
+#include <QFontDatabase>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    // Load our custom fonts
+    QFontDatabase fontDb;
+    fontDb.addApplicationFont(":/global/assets/Roboto-Regular.ttf");
+    fontDb.addApplicationFont(":/global/assets/Roboto-Light.ttf");
+    fontDb.addApplicationFont(":/global/assets/Roboto-BoldCondensedItalic.ttf");
 
     // Read the stylesheet
     QFile style(":/global/assets/mainstyle.qss");

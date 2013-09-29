@@ -2,6 +2,7 @@
 #include "AdbDevice.h"
 #include "util/Utils.h"
 
+#include <QApplication>
 #include <QProcess>
 #include <QDebug>
 
@@ -19,8 +20,6 @@ AdbMonitor::AdbMonitor(QObject *parent) :
 
     // Then we start our ADB instance
     startServer();
-
-    startMonitorService();
 }
 //----------------------------------------------
 AdbMonitor::~AdbMonitor()
@@ -54,18 +53,30 @@ void AdbMonitor::killDefault()
 //----------------------------------------------
 void AdbMonitor::startServer()
 {
-    //QProcess* proc = new QProcess(this);
+    QProcess* proc = new QProcess(this);
+    QString program = Utils::getBundlePath() + ADB_BINARY;
+    QStringList args;
+    args << "start-server";
+    proc->start(program, args);
+
+    startMonitorService();
+    emit onAdbReady();
 }
 //----------------------------------------------
 void AdbMonitor::startMonitorService()
 {
     // We constantly look for new ADB devices
     mMonitorTimerId = startTimer(1000);
+    timerEvent(NULL);
 }
 //----------------------------------------------
 void AdbMonitor::killServer()
 {
-
+    QProcess* proc = new QProcess(this);
+    QString program = Utils::getBundlePath() + ADB_BINARY;
+    QStringList args;
+    args << "kill-server";
+    proc->start(program, args);
 }
 //----------------------------------------------
 void AdbMonitor::timerEvent(QTimerEvent* evt)
@@ -170,20 +181,26 @@ void AdbMonitor::processAdbDevice(const QString &serial, const QString &deviceLi
     if (deviceLine.startsWith("unauthorized") && isNewDevice)
     {
         // A device has been plugged, but is not authorized
-        device->setAuthorized(false);
+        device->setState(ADB_DEVICE_STATE_UNAUTHORIZED);
         emit onDeviceUnauthorized(device);
     }
     else if (deviceLine.startsWith("offline") && isNewDevice)
     {
         // A device has been plugged, but is offline. User-wise,
         // it's the same thing: they need to check their device
-        device->setAuthorized(false);
+        device->setState(ADB_DEVICE_STATE_OFFLINE);
         emit onDeviceUnauthorized(device);
     }
-    else if (deviceLine.startsWith("device") && !device->isAuthorized())
+    else if (deviceLine.startsWith("recovery") && device->getState() != ADB_DEVICE_STATE_RECOVERY)
+    {
+        // A device arrived in recovery mode
+        device->setState(ADB_DEVICE_STATE_RECOVERY);
+        emit onDeviceConnected(device);
+    }
+    else if (deviceLine.startsWith("device") && device->getState() != ADB_DEVICE_STATE_ONLINE)
     {
         // Device is online or became online. We only notify once.
-        device->setAuthorized(true);
+        device->setState(ADB_DEVICE_STATE_ONLINE);
         QStringList props = deviceLine.split(" ");
         for (QStringList::iterator it = props.begin(); it != props.end(); ++it)
         {

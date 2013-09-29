@@ -24,6 +24,7 @@ private slots:
     void onDeviceConnected(AdbDevice* device);
     void onDeviceDisconnected(AdbDevice* device);
     void onClickContinue();
+    void onAdbReady();
 
 private:
     Ui::WelcomeDialog *ui;

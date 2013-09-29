@@ -22,10 +22,11 @@ WelcomeDialog::WelcomeDialog(QWidget *parent) :
             this, SLOT(onDeviceConnected(AdbDevice*)));
     connect(monitor, SIGNAL(onDeviceDisconnected(AdbDevice*)),
             this, SLOT(onDeviceDisconnected(AdbDevice*)));
+    connect(monitor, SIGNAL(onAdbReady()), this, SLOT(onAdbReady()));
 
     connect(ui->btnContinue, SIGNAL(clicked()), this, SLOT(onClickContinue()));
 
-    setUiState(NULL);
+    ui->btnNotRecognized->setVisible(false);
 }
 //------------------------------------------------------
 WelcomeDialog::~WelcomeDialog()
@@ -34,14 +35,40 @@ WelcomeDialog::~WelcomeDialog()
     if (mChooserDialog) delete mChooserDialog;
 }
 //------------------------------------------------------
+void WelcomeDialog::onAdbReady()
+{
+    setUiState(NULL);
+}
+//------------------------------------------------------
 void WelcomeDialog::setUiState(AdbDevice* device)
 {
     if (device)
     {
-        ui->lblTitleAction->setText(device->getModel().replace("_"," ") + " (" + device->getDevice() + ")");
-        ui->lblSummary->setText("Is this your device?");
-        ui->containerWizardButtons->setVisible(true);
-        ui->btnNotRecognized->setVisible(false);
+        switch (device->getState())
+        {
+        case ADB_DEVICE_STATE_ONLINE:
+            ui->lblTitleAction->setText(device->getModel().replace("_"," ") + " (" + device->getDevice() + ")");
+            ui->lblSummary->setText("Is this your device?");
+            ui->containerWizardButtons->setVisible(true);
+            ui->btnNotRecognized->setVisible(false);
+            break;
+
+        case ADB_DEVICE_STATE_UNAUTHORIZED:
+        case ADB_DEVICE_STATE_OFFLINE:
+            ui->lblTitleAction->setText(tr("Please allow access"));
+            ui->lblSummary->setText(tr("Unlock your phone screen, and accept the dialog asking you your permission to allow a computer to run commands on your device"));
+            ui->containerWizardButtons->setVisible(false);
+            ui->btnNotRecognized->setVisible(false);
+            break;
+
+        case ADB_DEVICE_STATE_RECOVERY:
+            ui->lblTitleAction->setText(tr("Recovery device detected"));
+            ui->lblSummary->setText(tr("Your device has been detected in recovery mode. To restore your device to a working state, press the button below. (TODO)"));
+            ui->containerWizardButtons->setVisible(false);
+            ui->btnNotRecognized->setVisible(false);
+            break;
+        }
+
     }
     else
     {

@@ -5,6 +5,7 @@ QDialog {
 }
 
 QPushButton {
+        font-family: 'Roboto','Arial', sans-serif;
 	height: 32px;
 }
 

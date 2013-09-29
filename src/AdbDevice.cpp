@@ -3,14 +3,14 @@
 
 //------------------------------------------
 AdbDevice::AdbDevice(const QString &serial) :
-    mSerial(serial), mIsAuthorized(false)
+    mSerial(serial), mState(ADB_DEVICE_STATE_OFFLINE)
 {
 
 }
 //------------------------------------------
-void AdbDevice::setAuthorized(bool authorized)
+void AdbDevice::setState(AdbDeviceState state)
 {
-    mIsAuthorized = authorized;
+    mState = state;
 }
 //------------------------------------------
 void AdbDevice::setDevice(const QString& device)
@@ -48,15 +48,15 @@ QString AdbDevice::getProduct() const
     return mProduct;
 }
 //------------------------------------------
-bool AdbDevice::isAuthorized() const
+AdbDeviceState AdbDevice::getState() const
 {
-    return mIsAuthorized;
+    return mState;
 }
 //------------------------------------------
 void AdbDevice::dump()
 {
     qDebug() << "Serial: " << mSerial;
-    qDebug() << "Authorized: " << mIsAuthorized;
+    qDebug() << "State: " << mState;
     qDebug() << "Product: " << mProduct;
     qDebug() << "Model: " << mModel;
     qDebug() << "Device: " << mDevice;

@@ -3,21 +3,29 @@
 
 #include <QString>
 
+enum AdbDeviceState
+{
+    ADB_DEVICE_STATE_OFFLINE,
+    ADB_DEVICE_STATE_UNAUTHORIZED,
+    ADB_DEVICE_STATE_ONLINE,
+    ADB_DEVICE_STATE_RECOVERY
+};
+
 class AdbDevice
 {
 public:
     explicit AdbDevice(const QString& serial);
 
-    void setAuthorized(bool authorized);
+    void setState(AdbDeviceState state);
     void setProduct(const QString& product);
     void setModel(const QString& model);
     void setDevice(const QString& device);
 
     /**
-     * @brief isAuthorized
-     * @return Computer allowed to access ADB on device
+     * @brief getState
+     * @return State of the device
      */
-    bool isAuthorized() const;
+    AdbDeviceState getState() const;
 
     /**
      * @brief getSerial
@@ -50,7 +58,7 @@ private:
     QString mProduct;
     QString mModel;
     QString mDevice;
-    bool mIsAuthorized;
+    AdbDeviceState mState;
 };
 
 #endif // ADBDEVICE_H

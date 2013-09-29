@@ -71,6 +71,11 @@ signals:
      */
     void onDeviceUnauthorized(AdbDevice*);
 
+    /**
+     * Signal emitted when adb is running
+     */
+    void onAdbReady();
+
 public slots:
     void onAdbDevicesReadyReadStdOut();
     void onAdbDevicesReadyReadStdErr();

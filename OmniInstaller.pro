@@ -53,7 +53,6 @@ HEADERS  += \
     src/QJson/json_scanner.h \
     src/QJson/json_parser.hh \
     src/QJson/FlexLexer.h \
-    src/chooserdialog.h \
     src/dialogs/ChooserDialog.h
 
 FORMS    += \

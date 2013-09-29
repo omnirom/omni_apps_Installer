@@ -2,6 +2,7 @@
 #define BUNDLEMANAGER_H
 
 #include <QString>
+#include <QStringList>
 
 /**
  * @brief The BundleRom class represents a ROM available in a downloaded bundle.
@@ -27,7 +28,39 @@ protected:
 class Bundle
 {
 public:
-    Bundle(const QString& name, const QString& url, int version);
+    Bundle(const QString& name, const QString& url, int version) : mName(name), mUrl(url),
+        mVersion(version) { }
+
+    /**
+     * @brief getProviderName
+     * @return The name of the bundle provider (e.g. 'XDA-Developers')
+     */
+    QString getProviderName() const { return mName; }
+
+    /**
+     * @brief getSchemeVersion
+     * @return The version of the scheme (e.g. 1)
+     */
+    int getSchemeVersion() const { return mVersion; }
+
+    /**
+     * @brief getPublicUrl
+     * @return The public URL that users can browse
+     */
+    QString getPublicUrl() const { return mUrl; }
+
+    /**
+     * @brief isDeviceSupported
+     * @param name The device codename (e.g. 'mako' or 'find5')
+     * @return True if the device is supported by at least one build provided by the bundle
+     */
+    bool isDeviceSupported(const QString& name);
+
+    /**
+     * @brief getSupportedRoms
+     * @return A list of the supported ROMs
+     */
+    QStringList getSupportedRoms();
 
 protected:
     QString mName;
@@ -52,35 +85,10 @@ public:
     void fetchBundle(const QString& url);
 
     /**
-     * @brief getProviderName
-     * @return The name of the bundle provider (e.g. 'XDA-Developers')
+     * @brief getCurrentBundle
+     * @return Returns current bundle (or null if none loaded)
      */
-    QString getProviderName() const;
-
-    /**
-     * @brief getSchemeVersion
-     * @return The version of the scheme (e.g. 1)
-     */
-    int getSchemeVersion() const;
-
-    /**
-     * @brief getPublicUrl
-     * @return The public URL that users can browse
-     */
-    QString getPublicUrl() const;
-
-    /**
-     * @brief isDeviceSupported
-     * @param name The device codename (e.g. 'mako' or 'find5')
-     * @return True if the device is supported by at least one build provided by the provider
-     */
-    bool isDeviceSupported(const QString& name);
-
-    /**
-     * @brief getSupportedRoms
-     * @return A list of the supported ROMs
-     */
-    QStringList getSupportedRoms();
+    Bundle* getCurrentBundle() const;
 
 protected:
     void parseBundle(const QString& data);

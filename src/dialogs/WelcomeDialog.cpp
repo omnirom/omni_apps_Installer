@@ -7,7 +7,7 @@
 #include <QDir>
 #include <QFile>
 #include <QMessageBox>
-#include <QDebug>"
+#include <QDebug>
 
 //------------------------------------------------------
 WelcomeDialog::WelcomeDialog(QWidget *parent) :

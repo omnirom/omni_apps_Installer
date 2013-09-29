@@ -50,18 +50,13 @@ void BundleManager::parseBundle(const QString &data)
     if (!ok) qDebug() << "Unable to parse root element of the JSON data";
 
     if (mCurrentBundle) delete mCurrentBundle;
-    mCurrentBundle = new Bundle;
 
-    mCurrentBundle->mName = j_root["name"];
-    mCurrentBundle->mUrl = j_root["url"];
-    mCurrentBundle->mVersion = j_root["schemeVersion"].toInt();
+    mCurrentBundle = new Bundle(j_root["name"].toString(), j_root["url"].toString(),
+            j_root["schemeVersion"].toInt());
 }
 //-----------------------------------------
-
-//-----------------------------------------
-
-//-----------------------------------------
-
-//-----------------------------------------
-
+Bundle* BundleManager::getCurrentBundle() const
+{
+    return mCurrentBundle;
+}
 //-----------------------------------------

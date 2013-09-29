@@ -66,12 +66,6 @@ signals:
     void onDeviceDisconnected(AdbDevice*);
 
     /**
-     * Signal emitted when a device is plugged but
-     * the computer is not authorized
-     */
-    void onDeviceUnauthorized(AdbDevice*);
-
-    /**
      * Signal emitted when adb is running
      */
     void onAdbReady();

@@ -14,11 +14,7 @@ AdbMonitor* AdbMonitor::sDefault = NULL;
 AdbMonitor::AdbMonitor(QObject *parent) :
     QObject(parent), mMonitorProcess(NULL)
 {
-    // We first make sure it's our ADB that runs,
-    // so we run killServer
-    killServer();
-
-    // Then we start our ADB instance
+    // We start our ADB instance
     startServer();
 }
 //----------------------------------------------
@@ -182,14 +178,14 @@ void AdbMonitor::processAdbDevice(const QString &serial, const QString &deviceLi
     {
         // A device has been plugged, but is not authorized
         device->setState(ADB_DEVICE_STATE_UNAUTHORIZED);
-        emit onDeviceUnauthorized(device);
+        emit onDeviceConnected(device);
     }
     else if (deviceLine.startsWith("offline") && isNewDevice)
     {
         // A device has been plugged, but is offline. User-wise,
         // it's the same thing: they need to check their device
         device->setState(ADB_DEVICE_STATE_OFFLINE);
-        emit onDeviceUnauthorized(device);
+        emit onDeviceConnected(device);
     }
     else if (deviceLine.startsWith("recovery") && device->getState() != ADB_DEVICE_STATE_RECOVERY)
     {

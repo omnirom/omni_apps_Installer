@@ -1,0 +1,13 @@
+QDialog {
+	background: white;
+	font-family: 'Roboto','Arial', sans-serif;
+	font-size: 14px;
+}
+
+QPushButton {
+	height: 32px;
+}
+
+#btnAutoInstall {
+	font-weight: bold;
+}

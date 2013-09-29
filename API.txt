@@ -1,0 +1,30 @@
+Plugging external ROMs into Omni Installer:
+
+- Users can enter their own API URL if they don't want
+  to use  the XDA back-end.
+
+Sample reply: (JSON)
+
+http://api.xda-developers.com/backend
+
+{
+	"name": "XDA-Developers",
+	"schemeVersion": 1,
+	"url": "http://www.xda-developers.com",
+	"roms": 
+	[
+		{
+			"name": "Omni",
+			"androidVersion": "4.3",
+			"supportedDevices": ["i9100", "i9300", "n7000", "mako", "flo", "grouper"],
+			"builds":
+			[
+				{"device":"i9100",
+				"timestamp":1273732894,
+				"type":"nightly",
+				"name":"Nightly for Galaxy S II (i9100)",
+				"url":"http://download.omnirom.org/nightly/i9300-20130929.zip"}
+			]
+		}
+	]
+}

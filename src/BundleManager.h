@@ -3,23 +3,68 @@
 
 #include <QString>
 #include <QStringList>
+#include <QDateTime>
+
+enum BuildType
+{
+    // Experimental build, generally done manually by a developer
+    BUILD_TYPE_EXPERIMENTAL,
+
+    // Nightly build, done automatically, but not verified to be working properly
+    BUILD_TYPE_NIGHTLY,
+
+    // Verified build, similar to nightly, but proven to be working "properly"
+    BUILD_TYPE_VERIFIED,
+
+    // Stable build
+    BUILD_TYPE_STABLE
+};
+
+
+class BundleBuild
+{
+public:
+    BundleBuild(const QString& title, const QString& description, const QString& downloadUrl,
+                const QString& device, const QDateTime& date, BuildType type) :
+        mTitle(title), mDescription(description), mDownloadUrl(downloadUrl), mDevice(device),
+        mDate(date), mBuildType(type) { }
+
+
+    QString getTitle() const { return mTitle; }
+    QString getDescription() const { return mDescription; }
+    QString getDownloadUrl() const { return mDownloadUrl; }
+    QString getDevice() const { return mDevice; }
+    QDateTime getDate() const { return mDate; }
+    BuildType getBuildType() const { return mBuildType; }
+
+protected:
+    QString mTitle;
+    QString mDescription;
+    QString mDownloadUrl;
+    QString mDevice;
+    QDateTime mDate;
+    BuildType mBuildType;
+};
+
 
 /**
- * @brief The BundleRom class represents a ROM available in a downloaded bundle.
+ * @brief The BundleRom class represents a ROM available in a downloaded bundle, and stores
+ *        the builds it handles.
  */
 class BundleRom
 {
 public:
-    BundleRom(const QString& name);
+    BundleRom(const QString& name) : mName(name) { }
 
-    /**
-     * @brief addSupportedDevice adds a device to the supported list
-     * @param device Code of the device (e.g. 'mako')
-     */
-    void addSupportedDevice(const QString& device);
+    QString getName() const { return mName; }
+
+    void addBuild(BundleBuild* build);
 
 protected:
+    QString mName;
     QStringList mSupportedDevices;
+    QList<BundleBuild*> mBuilds;
+
 };
 
 /**
@@ -70,6 +115,10 @@ protected:
     QList<BundleRom> mRoms;
 };
 
+
+/**
+ * @brief The BundleManager class manages the current Bundle, or downlads it from a remote URL
+ */
 class BundleManager
 {
 protected:

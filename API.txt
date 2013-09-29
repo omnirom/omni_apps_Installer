@@ -16,7 +16,6 @@ http://api.xda-developers.com/backend
 		{
 			"name": "Omni",
 			"androidVersion": "4.3",
-			"supportedDevices": ["i9100", "i9300", "n7000", "mako", "flo", "grouper"],
 			"builds":
 			[
 				{"device":"i9100",

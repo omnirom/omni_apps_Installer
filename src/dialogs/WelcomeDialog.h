@@ -29,6 +29,8 @@ private slots:
 private:
     Ui::WelcomeDialog *ui;
     ChooserDialog* mChooserDialog;
+    QString mActiveDevice;
+    QString mActiveDeviceFullname;
 };
 
 #endif // WELCOMEDIALOG_H

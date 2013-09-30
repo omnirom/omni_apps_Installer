@@ -1,12 +1,15 @@
 #include "WelcomeDialog.h"
 #include "ChooserDialog.h"
 #include "ui_welcomedialog.h"
+
 #include "../AdbMonitor.h"
 #include "../AdbDevice.h"
+#include "../BundleManager.h"
 
 #include <QDir>
 #include <QFile>
 #include <QMessageBox>
+#include <QProgressDialog>
 #include <QDebug>
 
 //------------------------------------------------------
@@ -47,10 +50,14 @@ void WelcomeDialog::setUiState(AdbDevice* device)
         switch (device->getState())
         {
         case ADB_DEVICE_STATE_ONLINE:
-            ui->lblTitleAction->setText(device->getModel().replace("_"," ") + " (" + device->getDevice() + ")");
-            ui->lblSummary->setText("Is this your device?");
+            mActiveDevice = device->getDevice();
+            mActiveDeviceFullname = device->getModel().replace("_"," ");
+
+            ui->lblTitleAction->setText(tr("%1 (%2)").arg(mActiveDeviceFullname).arg(mActiveDevice));
+            ui->lblSummary->setText(tr("Is this your device?"));
             ui->containerWizardButtons->setVisible(true);
             ui->btnNotRecognized->setVisible(false);
+
             break;
 
         case ADB_DEVICE_STATE_UNAUTHORIZED:
@@ -105,13 +112,38 @@ void WelcomeDialog::onClickContinue()
     // We hide the current dialog, and fetch available bundles from our back-end
     close();
 
+    // Show a nice dialog
+    QProgressDialog* fetchProgress = new QProgressDialog();
+    fetchProgress->setCancelButton(NULL);
+    fetchProgress->setLabelText(tr("Downloading device support..."));
+    fetchProgress->setValue(50);
+    fetchProgress->show();
+
+    qApp->processEvents();
+
+    // And on we fetch!
+    BundleManager* bm = BundleManager::getDefault();
+    bm->fetchBundle("derp");
+
+    delete fetchProgress;
+
+    if (!bm->getCurrentBundle()->isDeviceSupported(mActiveDevice))
+    {
+        QMessageBox::critical(this, tr("Your device is not supported"),
+                              tr("Oops, it seems like your %1 isn't supported by %2.")
+                              .arg(mActiveDeviceFullname).arg(bm->getCurrentBundle()->getProviderName()));
+        show();
+        return;
+    }
+
+    // We open the chooser dialog if everything went fine so far
     if (mChooserDialog != NULL)
     {
         delete mChooserDialog;
         mChooserDialog = NULL;
     }
 
-    mChooserDialog = new ChooserDialog();
+    mChooserDialog = new ChooserDialog(mActiveDevice);
     mChooserDialog->show();
 }
 //------------------------------------------------------

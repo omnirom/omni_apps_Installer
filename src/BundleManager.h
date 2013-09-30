@@ -16,9 +16,18 @@ enum BuildType
     // Verified build, similar to nightly, but proven to be working "properly"
     BUILD_TYPE_VERIFIED,
 
+    // Release candidate
+    BUILD_TYPE_RELEASE_CANDIDATE,
+
     // Stable build
     BUILD_TYPE_STABLE
 };
+
+#define BUILD_TYPE_EXPERIMENTAL_STR         "experimental"
+#define BUILD_TYPE_NIGHTLY_STR              "nightly"
+#define BUILD_TYPE_VERIFIED_STR             "verified"
+#define BUILD_TYPE_RELEASE_CANDIDATE_STR    "rc"
+#define BUILD_TYPE_STABLE_STR               "stable"
 
 /**
  * @brief The BundleBuild class represents a build available for a specific ROM
@@ -56,16 +65,22 @@ protected:
 class BundleRom
 {
 public:
-    BundleRom(const QString& name) : mName(name) { }
+    BundleRom(const QString& name, const QString& androidVersion, const QString& iconUrl);
+    ~BundleRom();
 
     QString getName() const { return mName; }
+    QString getAndroidVersion() const { return mAndroidVersion; }
+    QString getIconUrl() const { return mIconUrl; }
 
     void addBuild(BundleBuild* build);
+    bool isDeviceSupported(const QString& device);
 
 protected:
     QString mName;
-    QStringList mSupportedDevices;
+    QString mAndroidVersion;
+    QString mIconUrl;
     QList<BundleBuild*> mBuilds;
+    QStringList mSupportedDevices;
 
 };
 
@@ -77,6 +92,7 @@ class Bundle
 public:
     Bundle(const QString& name, const QString& url, int version) : mName(name), mUrl(url),
         mVersion(version) { }
+    ~Bundle();
 
     /**
      * @brief getProviderName
@@ -107,14 +123,16 @@ public:
      * @brief getSupportedRoms
      * @return A list of the supported ROMs
      */
-    QStringList getSupportedRoms();
+    QList<BundleRom*> getSupportedRoms(const QString& device);
+
+    void addRom(BundleRom* rom) { mRoms.push_back(rom); }
 
 protected:
     QString mName;
     QString mUrl;
     int mVersion;
 
-    QList<BundleRom> mRoms;
+    QList<BundleRom*> mRoms;
 };
 
 
@@ -143,6 +161,7 @@ public:
 
 protected:
     void parseBundle(const QString& data);
+    BuildType buildTypeNameToEnum(const QString& name);
 
     static BundleManager* sDefault;
 

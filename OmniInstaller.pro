@@ -27,7 +27,8 @@ SOURCES += \
     src/QJson/json_scanner.cpp \
     src/QJson/json_scanner.cc \
     src/QJson/json_parser.cc \
-    src/dialogs/ChooserDialog.cpp
+    src/dialogs/ChooserDialog.cpp \
+    src/dialogs/RomListDialog.cpp
 
 HEADERS  += \
     src/util/HttpClient.h \
@@ -53,11 +54,13 @@ HEADERS  += \
     src/QJson/json_scanner.h \
     src/QJson/json_parser.hh \
     src/QJson/FlexLexer.h \
-    src/dialogs/ChooserDialog.h
+    src/dialogs/ChooserDialog.h \
+    src/dialogs/RomListDialog.h
 
 FORMS    += \
     ui/welcomedialog.ui \
-    ui/chooserdialog.ui
+    ui/chooserdialog.ui \
+    ui/romlistdialog.ui
 
 RESOURCES += \
     resources.qrc

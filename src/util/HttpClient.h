@@ -2,6 +2,9 @@
 #define HTTPCLIENT_H
 
 #include <QObject>
+#include <QNetworkRequest>
+#include <QNetworkReply>
+#include <QNetworkAccessManager>
 
 class HttpClient : public QObject
 {
@@ -15,9 +18,16 @@ public:
      * @param url The URL
      * @return The data of the file, in a QString
      */
-    QString downloadUrl(const QString& url);
+    QNetworkReply* downloadUrl(const QString& url);
+
+private slots:
+    void httpFinished(QNetworkReply* reply);
+
+signals:
+    void onDownloadFinished(QNetworkReply* reply, QString data);
 
 protected:
+    QNetworkAccessManager mNetworkManager;
 
 };
 

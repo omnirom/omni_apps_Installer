@@ -1,4 +1,5 @@
 #include "BundleManager.h"
+#include "util/HttpClient.h"
 
 #include "QJson/Parser"
 #include <QMessageBox>
@@ -93,20 +94,17 @@ BundleManager* BundleManager::getDefault()
 //-----------------------------------------
 void BundleManager::fetchBundle(const QString &url)
 {
-    // TODO: Fetch from web
-    QString bundleData = "{"
-            "\"name\": \"XDA-Developers\",\"schemeVersion\": 1,\"url\": \"http://www.xda-developers.com\","
-            "\"roms\":["
-                "{"
-                    "\"name\": \"Omni\",\"androidVersion\": \"4.3\",\"icon\": \"http://placekitten.com/g/200/300\","
-                    "\"builds\":["
-                        "{\"device\":\"mako\",\"timestamp\":1273732894,\"type\":\"nightly\",\"name\":\"Nightly for Galaxy S II (i9100)\",\"description\":\"some build\",\"url\":\"http://download.omnirom.org/nightly/i9300-20130929.zip\"}"
-                    "]"
-                "}"
-            "]}";
-
-    // Parse JSON data
-    parseBundle(bundleData);
+    // Fetch the bundle from the Internetz
+    HttpClient* httpClient = new HttpClient(this);
+    connect(httpClient, SIGNAL(onDownloadFinished(QNetworkReply*,QString)),
+            this, SLOT(onBundleDownloadReady(QNetworkReply*, QString)));
+    httpClient->downloadUrl(url);
+}
+//-----------------------------------------
+void BundleManager::onBundleDownloadReady(QNetworkReply* reply, QString data)
+{
+    Q_UNUSED(reply);
+    parseBundle(data);
 }
 //-----------------------------------------
 void BundleManager::parseBundle(const QString &data)
@@ -154,6 +152,9 @@ void BundleManager::parseBundle(const QString &data)
 
         mCurrentBundle->addRom(rom);
     }
+
+    // We're ready!
+    emit bundleReady();
 }
 //-----------------------------------------
 Bundle* BundleManager::getCurrentBundle() const

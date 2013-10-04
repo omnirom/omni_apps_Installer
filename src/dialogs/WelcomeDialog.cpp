@@ -15,7 +15,7 @@
 //------------------------------------------------------
 WelcomeDialog::WelcomeDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::WelcomeDialog), mChooserDialog(NULL)
+    ui(new Ui::WelcomeDialog), mChooserDialog(NULL), mDownloadProgress(NULL)
 {
     ui->setupUi(this);
     ui->containerWizardButtons->setVisible(false);
@@ -30,6 +30,8 @@ WelcomeDialog::WelcomeDialog(QWidget *parent) :
     connect(ui->btnContinue, SIGNAL(clicked()), this, SLOT(onClickContinue()));
 
     ui->btnNotRecognized->setVisible(false);
+
+    setUiState(NULL);
 }
 //------------------------------------------------------
 WelcomeDialog::~WelcomeDialog()
@@ -113,19 +115,29 @@ void WelcomeDialog::onClickContinue()
     close();
 
     // Show a nice dialog
-    QProgressDialog* fetchProgress = new QProgressDialog();
-    fetchProgress->setCancelButton(NULL);
-    fetchProgress->setLabelText(tr("Downloading device support..."));
-    fetchProgress->setValue(50);
-    fetchProgress->show();
+    if (mDownloadProgress) delete mDownloadProgress;
+    mDownloadProgress = new QProgressDialog();
+    mDownloadProgress->setCancelButton(NULL);
+    mDownloadProgress->setLabelText(tr("Downloading device support..."));
+    mDownloadProgress->setValue(50); //TODO: Real progress callback
+    mDownloadProgress->show();
 
     qApp->processEvents();
 
     // And on we fetch!
     BundleManager* bm = BundleManager::getDefault();
-    bm->fetchBundle("derp");
+    connect(bm, SIGNAL(bundleReady()), this, SLOT(onBundleReady()));
 
-    delete fetchProgress;
+    bm->fetchBundle("http://xplod.fr/test_oi/bundle.json");
+}
+//------------------------------------------------------
+void WelcomeDialog::onBundleReady()
+{
+    BundleManager* bm = BundleManager::getDefault();
+    disconnect(bm, SIGNAL(bundleReady()), this, SLOT(onBundleReady()));
+
+    delete mDownloadProgress;
+    mDownloadProgress = NULL;
 
     if (!bm->getCurrentBundle()->isDeviceSupported(mActiveDevice))
     {

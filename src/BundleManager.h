@@ -4,6 +4,7 @@
 #include <QString>
 #include <QStringList>
 #include <QDateTime>
+#include <QNetworkReply>
 
 enum BuildType
 {
@@ -139,8 +140,10 @@ protected:
 /**
  * @brief The BundleManager class manages the current Bundle, or downlads it from a remote URL
  */
-class BundleManager
+class BundleManager : public QObject
 {
+    Q_OBJECT
+
 protected:
     explicit BundleManager();
 
@@ -158,6 +161,12 @@ public:
      * @return Returns current bundle (or null if none loaded)
      */
     Bundle* getCurrentBundle() const;
+
+signals:
+    void bundleReady();
+
+private slots:
+    void onBundleDownloadReady(QNetworkReply* reply, QString data);
 
 protected:
     void parseBundle(const QString& data);

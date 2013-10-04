@@ -2,6 +2,7 @@
 #include "ui_romlistdialog.h"
 
 #include "../BundleManager.h"
+#include "ChooserDialog.h"
 
 #include <QDebug>
 

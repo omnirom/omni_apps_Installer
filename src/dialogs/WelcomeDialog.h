@@ -2,6 +2,7 @@
 #define WELCOMEDIALOG_H
 
 #include <QDialog>
+#include <QProgressDialog>
 
 namespace Ui {
 class WelcomeDialog;
@@ -25,12 +26,14 @@ private slots:
     void onDeviceDisconnected(AdbDevice* device);
     void onClickContinue();
     void onAdbReady();
+    void onBundleReady();
 
 private:
     Ui::WelcomeDialog *ui;
     ChooserDialog* mChooserDialog;
     QString mActiveDevice;
     QString mActiveDeviceFullname;
+    QProgressDialog* mDownloadProgress;
 };
 
 #endif // WELCOMEDIALOG_H

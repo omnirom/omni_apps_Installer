@@ -1,0 +1,13 @@
+[
+{
+    "device":"mako",
+    "unlock":{
+        "method":"fastboot",
+        "commands":["oem unlock"]
+    },
+    "recovery":{
+        "method":"fastboot",
+        "commands":["flash recovery %1", "boot %1"]
+    }
+}
+]

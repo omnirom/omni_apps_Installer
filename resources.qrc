@@ -6,5 +6,6 @@
         <file>assets/Roboto-Light.ttf</file>
         <file>assets/Roboto-Regular.ttf</file>
         <file>assets/Roboto-Thin.ttf</file>
+        <file>assets/scenarios.json</file>
     </qresource>
 </RCC>

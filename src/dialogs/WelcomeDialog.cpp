@@ -5,6 +5,7 @@
 #include "../AdbMonitor.h"
 #include "../AdbDevice.h"
 #include "../BundleManager.h"
+#include "../FlashScenario.h"
 
 #include <QDir>
 #include <QFile>
@@ -111,6 +112,16 @@ void WelcomeDialog::onDeviceDisconnected(AdbDevice* device)
 //------------------------------------------------------
 void WelcomeDialog::onClickContinue()
 {
+    // We first check if the device is supported (ie. we have a scenario for it)
+    if (!FlashScenario::existsForDevice(mActiveDevice))
+    {
+        QMessageBox::critical(this, tr("Unsupported device"),
+                              tr("Unfortunately, we don't have information yet on how to flash your %1 (%2)")
+                              .arg(mActiveDeviceFullname)
+                              .arg(mActiveDevice));
+        return;
+    }
+
     // We hide the current dialog, and fetch available bundles from our back-end
     close();
 

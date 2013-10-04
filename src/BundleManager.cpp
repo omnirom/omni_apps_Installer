@@ -39,6 +39,23 @@ bool BundleRom::isDeviceSupported(const QString &device)
     return mSupportedDevices.contains(device);
 }
 //-----------------------------------------
+QList<BundleBuild*> BundleRom::getBuilds(BuildType type, const QString& device)
+{
+    QList<BundleBuild*> matches;
+
+    for (QList<BundleBuild*>::iterator it = mBuilds.begin(); it != mBuilds.end(); ++it)
+    {
+        BundleBuild* build = (*it);
+        if (build->getBuildType() == type && build->getDevice() == device)
+        {
+            // Matching our parameters, return that build
+            matches.push_back(build);
+        }
+    }
+
+    return matches;
+}
+//-----------------------------------------
 //-----------------------------------------
 Bundle::~Bundle()
 {

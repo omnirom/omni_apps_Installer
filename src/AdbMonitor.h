@@ -52,6 +52,13 @@ public:
                   const QString& localPath,
                   const QString& deviceSerial = "");
 
+    /**
+     * @brief reboot Reboots the device to the specified destination mode
+     * @param destination The destination to reboot to (e.g. "recovery"), or empty for a normal
+     *                    reboot
+     */
+    void reboot(const QString& destination = "");
+
     void timerEvent(QTimerEvent* evt);
 signals:
     /**

@@ -28,7 +28,11 @@ SOURCES += \
     src/QJson/json_scanner.cc \
     src/QJson/json_parser.cc \
     src/dialogs/ChooserDialog.cpp \
-    src/dialogs/RomListDialog.cpp
+    src/dialogs/RomListDialog.cpp \
+    src/FlashScenario.cpp \
+    src/flasher/AbstractStep.cpp \
+    src/flasher/FastbootStep.cpp \
+    src/dialogs/FlashingDialog.cpp
 
 HEADERS  += \
     src/util/HttpClient.h \
@@ -55,12 +59,17 @@ HEADERS  += \
     src/QJson/json_parser.hh \
     src/QJson/FlexLexer.h \
     src/dialogs/ChooserDialog.h \
-    src/dialogs/RomListDialog.h
+    src/dialogs/RomListDialog.h \
+    src/FlashScenario.h \
+    src/flasher/AbstractStep.h \
+    src/flasher/FastbootStep.h \
+    src/dialogs/FlashingDialog.h
 
 FORMS    += \
     ui/welcomedialog.ui \
     ui/chooserdialog.ui \
-    ui/romlistdialog.ui
+    ui/romlistdialog.ui \
+    ui/flashingdialog.ui
 
 RESOURCES += \
     resources.qrc

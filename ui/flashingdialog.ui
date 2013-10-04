@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FlashingDialog</class>
+ <widget class="QDialog" name="FlashingDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>645</width>
+    <height>575</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Arial</family>
+    <pointsize>11</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>OmniInstaller</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">@import url(&quot;:/global/assets/mainstyle.qss&quot;);</string>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <item row="0" column="0" colspan="3">
+    <widget class="QLabel" name="lblTitle">
+     <property name="styleSheet">
+      <string notr="true">font-size: 24px;
+font-family: 'Roboto Lt';
+color: #33B5E5;</string>
+     </property>
+     <property name="text">
+      <string>Flashing</string>
+     </property>
+     <property name="indent">
+      <number>9</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="4">
+    <widget class="Line" name="line">
+     <property name="styleSheet">
+      <string notr="true">background: #33B5E5;
+border: 0px;</string>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Plain</enum>
+     </property>
+     <property name="midLineWidth">
+      <number>1</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="4">
+    <widget class="QLabel" name="lblSubTitle">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"> font-family:'Roboto Cn'; font-weight:600; font-style:italic; font-size:28px;</string>
+     </property>
+     <property name="text">
+      <string>Installation in progress</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="margin">
+      <number>9</number>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="4">
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="imgDevice">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="../resources.qrc">:/global/assets/device-frame.png</pixmap>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Please wait while we are installing the new system on your device. Your device will reboot multiple times throughout the process, this is normal. Unless asked by this app, please don't touch your device during the process.</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+        <property name="wordWrap">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="../resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>

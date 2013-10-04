@@ -33,7 +33,7 @@
     <number>0</number>
    </property>
    <item row="0" column="0" colspan="3">
-    <widget class="QLabel" name="label">
+    <widget class="QLabel" name="lblTitle">
      <property name="styleSheet">
       <string notr="true">font-size: 24px;
 font-family: 'Roboto Lt';
@@ -65,7 +65,7 @@ border: 0px;</string>
     </widget>
    </item>
    <item row="2" column="0" colspan="4">
-    <widget class="QLabel" name="lblTitle">
+    <widget class="QLabel" name="lblSubTitle">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
        <horstretch>0</horstretch>
@@ -106,23 +106,50 @@ border: 0px;</string>
         </property>
         <layout class="QGridLayout" name="gridLayout_3">
          <item row="0" column="0">
-          <widget class="QLabel" name="label_3">
+          <widget class="QLabel" name="lblTitleHeader">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
            <property name="text">
-            <string>Title</string>
+            <string>Title:</string>
            </property>
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_4">
+          <widget class="QLabel" name="lblDescriptionHeader">
            <property name="text">
-            <string>Description</string>
+            <string>Description:</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLabel" name="label_5">
+          <widget class="QLabel" name="lblDateHeader">
            <property name="text">
-            <string>Date</string>
+            <string>Date:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1" colspan="3">
+          <widget class="QLabel" name="lblDateValue">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1" colspan="3">
+          <widget class="QLabel" name="lblDescriptionValue">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="3">
+          <widget class="QLabel" name="lblTitleValue">
+           <property name="text">
+            <string/>
            </property>
           </widget>
          </item>
@@ -194,17 +221,40 @@ border: 0px;</string>
        </spacer>
       </item>
       <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="lblBuildTypeHeader">
         <property name="text">
          <string>Build type :</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QComboBox" name="cbBuildType">
+        <property name="currentIndex">
+         <number>4</number>
+        </property>
         <item>
          <property name="text">
-          <string>New Item</string>
+          <string>Experimental</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Nightly</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Verified</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Release Candidate</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stable</string>
          </property>
         </item>
        </widget>

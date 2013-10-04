@@ -240,3 +240,17 @@ void AdbMonitor::pushFile(const QString &srcPath,
 
 }
 //----------------------------------------------
+void AdbMonitor::reboot(const QString &destination)
+{
+    QProcess* proc = new QProcess(this);
+    QString program = Utils::getBundlePath() + ADB_BINARY;
+    QStringList args;
+    args << "reboot" << destination;
+    proc->start(program, args);
+
+    if (!proc->waitForFinished(10000))
+    {
+        qDebug() << "Timed out waiting for adb reboot " << destination;
+    }
+}
+//----------------------------------------------

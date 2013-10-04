@@ -6,6 +6,8 @@
 #include <QNetworkReply>
 #include <QListWidgetItem>
 
+#include "../BundleManager.h"
+
 namespace Ui {
 class RomListDialog;
 }
@@ -18,18 +20,23 @@ public:
     virtual ~RomListDialog();
 
 protected:
+    void updateList(BuildType type);
     void getRomIcon(const QString& url, QListWidgetItem* item);
 
 signals:
 
 public slots:
     void onClickBack();
+    void onClickInstall();
     void onIconDownloadFinished(QNetworkReply*);
+    void onClickListItem(QListWidgetItem*);
+    void onChangeBuildType(int);
 
 private:
     Ui::RomListDialog *ui;
     QString mActiveDevice;
     QMap<QNetworkReply*, QListWidgetItem*> mPendingIcons;
+    QMap<QListWidgetItem*, BundleBuild*> mRomItems;
 };
 
 #endif // ROMLISTDIALOG_H

@@ -6,22 +6,26 @@
 #include <QDateTime>
 #include <QNetworkReply>
 
+/**
+ * Make sure those build types matches both the API number, AND the romlistdialog UI combo
+ * box order!
+ */
 enum BuildType
 {
     // Experimental build, generally done manually by a developer
-    BUILD_TYPE_EXPERIMENTAL,
+    BUILD_TYPE_EXPERIMENTAL = 0,
 
     // Nightly build, done automatically, but not verified to be working properly
-    BUILD_TYPE_NIGHTLY,
+    BUILD_TYPE_NIGHTLY      = 1,
 
     // Verified build, similar to nightly, but proven to be working "properly"
-    BUILD_TYPE_VERIFIED,
+    BUILD_TYPE_VERIFIED     = 2,
 
     // Release candidate
-    BUILD_TYPE_RELEASE_CANDIDATE,
+    BUILD_TYPE_RELEASE_CANDIDATE = 3,
 
     // Stable build
-    BUILD_TYPE_STABLE
+    BUILD_TYPE_STABLE       = 4
 };
 
 #define BUILD_TYPE_EXPERIMENTAL_STR         "experimental"
@@ -72,6 +76,7 @@ public:
     QString getName() const { return mName; }
     QString getAndroidVersion() const { return mAndroidVersion; }
     QString getIconUrl() const { return mIconUrl; }
+    QList<BundleBuild*> getBuilds(BuildType type, const QString& device);
 
     void addBuild(BundleBuild* build);
     bool isDeviceSupported(const QString& device);

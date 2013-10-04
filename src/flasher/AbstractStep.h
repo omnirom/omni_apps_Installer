@@ -33,7 +33,7 @@ signals:
     /**
      * @brief stepError Signal sent when the step hasn't returned 0
      */
-    void stepError(QString stdout, QString stderr);
+    void stepError(int exitCode, QString stdout, QString stderr);
 
 public slots:
     /**
@@ -45,6 +45,11 @@ public slots:
      * @brief onStdErr Called when the process started outputs something on the error output
      */
     virtual void onStdErr();
+
+    /**
+     * @brief onProcessFinished Called when the process exits
+     */
+    virtual void onProcessFinished(int exitCode);
 
 protected:
     QProcess* mProcess;

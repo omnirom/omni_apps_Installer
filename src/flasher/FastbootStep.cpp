@@ -21,11 +21,13 @@ void FastbootStep::runStep(const QStringList &commands)
 
     if (!mProcess->waitForStarted(5000))
     {
+        qDebug() << "Timeout starting fastboot process!";
+
         // The process couldn't start successfully
-        emit stepError("", "Internal error: waitForStarted timeout");
+        emit stepError(-1, "", "Internal error: waitForStarted timeout");
         return;
     }
 
-    mProcess->waitForFinished(-1);
+
 }
 //------------------------------------------------

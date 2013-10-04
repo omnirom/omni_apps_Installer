@@ -5,6 +5,7 @@
 #include "flasher/FastbootStep.h"
 #include "BundleManager.h"
 #include "AdbMonitor.h"
+#include "FastbootMonitor.h"
 
 #include <QFile>
 #include <QMessageBox>
@@ -128,5 +129,60 @@ bool FlashScenario::flash(BundleBuild *build)
 
     // Start flashing! First reboot, to bootloader my dear.
     AdbMonitor::getDefault()->reboot("bootloader");
+    onFlashStep_InitialReboot();
 }
+//-------------------------------------------------
+void FlashScenario::onFlashStep_InitialReboot()
+{
+    // We monitor fastboot here to be notified when we're ready to unlock. Just waiting on the
+    // device to reboot.
+    FastbootMonitor* fbm = FastbootMonitor::getDefault();
+    connect(fbm, SIGNAL(onFastbootOnline()), this, SLOT(onFlashStep_UnlockReady()));
+    fbm->startMonitoring();
+}
+//-------------------------------------------------
+void FlashScenario::onFlashStep_UnlockReady()
+{
+    // We got the news, no need to tell again
+    FastbootMonitor* fbm = FastbootMonitor::getDefault();
+    disconnect(fbm, SIGNAL(onFastbootOnline()), this, SLOT(onFlashStep_UnlockReady()));
+
+    // Device is in fastboot mode, let's run the unlock method
+    connect(mScenario->unlockStep.method, SIGNAL(stepEnded(QString)),
+            this, SLOT(onFlashStep_UnlockComplete(QString)));
+
+    mScenario->unlockStep.method->runStep(mScenario->unlockStep.commands);
+}
+//-------------------------------------------------
+void FlashScenario::onFlashStep_UnlockComplete(QString stdout)
+{
+    qDebug() << "Unlock result: " << stdout;
+}
+//-------------------------------------------------
+void FlashScenario::onFlashStep_PostUnlockReboot()
+{
+
+}
+//-------------------------------------------------
+void FlashScenario::onFlashStep_RecoveryReady()
+{
+
+}
+//-------------------------------------------------
+void FlashScenario::onFlashStep_RecoveryComplete()
+{
+
+}
+//-------------------------------------------------
+void FlashScenario::onFlashStep_InitialAdbReady()
+{
+
+}
+//-------------------------------------------------
+void FlashScenario::onFlashStep_SideloadAdbReady()
+{
+
+}
+//-------------------------------------------------
+
 //-------------------------------------------------

@@ -3,7 +3,7 @@
     "device":"mako",
     "unlock":{
         "method":"fastboot",
-        "commands":["oem unlock"]
+        "commands":["oem", "unlock"]
     },
     "recovery":{
         "method":"fastboot",

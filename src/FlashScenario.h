@@ -63,6 +63,22 @@ signals:
 
 
 public slots:
+    // Slot to call when the initial reboot has been initiated
+    void onFlashStep_InitialReboot();
+    // Slot to call when unlock step is ready to be performed
+    void onFlashStep_UnlockReady();
+    // Slot to call when unlock is complete
+    void onFlashStep_UnlockComplete(QString stdout);
+    // Slot to call when post-unlock reboot has been initiated
+    void onFlashStep_PostUnlockReboot();
+    // Slot to call when recovery step is ready to be performed
+    void onFlashStep_RecoveryReady();
+    // Slot to call when recovery flash/boot is complete
+    void onFlashStep_RecoveryComplete();
+    // Slot to call when initial ADB step is up
+    void onFlashStep_InitialAdbReady();
+    // Slot to call when sideload ADB step is up
+    void onFlashStep_SideloadAdbReady();
 
 protected:
     void loadDeviceScenario(QVariantMap data);

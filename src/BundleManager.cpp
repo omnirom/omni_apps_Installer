@@ -96,15 +96,14 @@ void BundleManager::fetchBundle(const QString &url)
 {
     // Fetch the bundle from the Internetz
     HttpClient* httpClient = new HttpClient(this);
-    connect(httpClient, SIGNAL(onDownloadFinished(QNetworkReply*,QString)),
-            this, SLOT(onBundleDownloadReady(QNetworkReply*, QString)));
+    connect(httpClient, SIGNAL(onDownloadFinished(QNetworkReply*)),
+            this, SLOT(onBundleDownloadReady(QNetworkReply*)));
     httpClient->downloadUrl(url);
 }
 //-----------------------------------------
-void BundleManager::onBundleDownloadReady(QNetworkReply* reply, QString data)
+void BundleManager::onBundleDownloadReady(QNetworkReply* reply)
 {
-    Q_UNUSED(reply);
-    parseBundle(data);
+    parseBundle(QString(reply->readAll()));
 }
 //-----------------------------------------
 void BundleManager::parseBundle(const QString &data)

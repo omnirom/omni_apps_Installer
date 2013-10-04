@@ -166,7 +166,7 @@ signals:
     void bundleReady();
 
 private slots:
-    void onBundleDownloadReady(QNetworkReply* reply, QString data);
+    void onBundleDownloadReady(QNetworkReply* reply);
 
 protected:
     void parseBundle(const QString& data);

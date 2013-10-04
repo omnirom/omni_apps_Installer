@@ -15,7 +15,6 @@ QNetworkReply* HttpClient::downloadUrl(const QString &url)
 //----------------------------------------------------------------------
 void HttpClient::httpFinished(QNetworkReply *reply)
 {
-    QByteArray data = reply->readAll();
-    emit onDownloadFinished(reply, QString(data));
+    emit onDownloadFinished(reply);
 }
 //----------------------------------------------------------------------

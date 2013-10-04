@@ -24,7 +24,7 @@ private slots:
     void httpFinished(QNetworkReply* reply);
 
 signals:
-    void onDownloadFinished(QNetworkReply* reply, QString data);
+    void onDownloadFinished(QNetworkReply* reply);
 
 protected:
     QNetworkAccessManager mNetworkManager;

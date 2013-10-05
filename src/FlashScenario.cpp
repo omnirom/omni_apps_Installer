@@ -154,9 +154,9 @@ void FlashScenario::onFlashStep_UnlockReady()
     mScenario->unlockStep.method->runStep(mScenario->unlockStep.commands);
 }
 //-------------------------------------------------
-void FlashScenario::onFlashStep_UnlockComplete(QString stdout)
+void FlashScenario::onFlashStep_UnlockComplete(QString stdOut)
 {
-    qDebug() << "Unlock result: " << stdout;
+    qDebug() << "Unlock result: " << stdOut;
 }
 //-------------------------------------------------
 void FlashScenario::onFlashStep_PostUnlockReboot()

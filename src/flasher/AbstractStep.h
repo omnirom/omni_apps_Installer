@@ -28,12 +28,13 @@ signals:
     /**
      * @brief stepEnded Signal sent when the step has successfully finished
      */
-    void stepEnded(QString stdout);
+    void stepEnded(QString /*stdout*/);
 
     /**
      * @brief stepError Signal sent when the step hasn't returned 0
+     *
      */
-    void stepError(int exitCode, QString stdout, QString stderr);
+    void stepError(int /*exitCode*/, QString /*stdout*/, QString /*stderr*/);
 
 public slots:
     /**

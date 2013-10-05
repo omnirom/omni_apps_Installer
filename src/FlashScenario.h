@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QStringList>
 #include <QVariantMap>
+#include <QString>
 
 class AbstractStep;
 class BundleBuild;
@@ -34,6 +35,7 @@ struct ScenarioData
 class FlashScenario : public QObject
 {
     Q_OBJECT
+
 public:
     explicit FlashScenario(QObject *parent = 0);
     ~FlashScenario();
@@ -59,16 +61,13 @@ public:
      */
     bool flash(BundleBuild* build);
 
-signals:
-
-
-public slots:
+private slots:
     // Slot to call when the initial reboot has been initiated
     void onFlashStep_InitialReboot();
     // Slot to call when unlock step is ready to be performed
     void onFlashStep_UnlockReady();
     // Slot to call when unlock is complete
-    void onFlashStep_UnlockComplete(QString stdout);
+    void onFlashStep_UnlockComplete(QString);
     // Slot to call when post-unlock reboot has been initiated
     void onFlashStep_PostUnlockReboot();
     // Slot to call when recovery step is ready to be performed

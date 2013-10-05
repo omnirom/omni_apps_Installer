@@ -34,7 +34,8 @@ SOURCES += \
     src/flasher/FastbootStep.cpp \
     src/dialogs/FlashingDialog.cpp \
     src/FastbootMonitor.cpp \
-    src/ui/AnimatedLabel.cpp
+    src/ui/AnimatedLabel.cpp \
+    src/flasher/NullStep.cpp
 
 HEADERS  += \
     src/util/HttpClient.h \
@@ -67,7 +68,8 @@ HEADERS  += \
     src/flasher/FastbootStep.h \
     src/dialogs/FlashingDialog.h \
     src/FastbootMonitor.h \
-    src/ui/AnimatedLabel.h
+    src/ui/AnimatedLabel.h \
+    src/flasher/NullStep.h
 
 FORMS    += \
     ui/welcomedialog.ui \

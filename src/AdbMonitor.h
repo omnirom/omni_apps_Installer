@@ -17,6 +17,12 @@ public:
     void killDefault();
 
     /**
+     * @brief hasDeviceConnected
+     * @return true if a device is in an online state
+     */
+    bool hasDeviceConnected();
+
+    /**
      * @brief killServer Kills ADB server
      */
     void killServer();
@@ -58,6 +64,20 @@ public:
      *                    reboot
      */
     void reboot(const QString& destination = "");
+
+    /**
+     * @brief shell Runs an "adb shell" command followed by the provided parameters.
+     * @param parameters The command/parameters to run adb shell, knowing that it is escaped
+     * with simple quotes.
+     * @param blocking True to wait for the process to finish
+     */
+    void shell(const QString& parameters, bool blocking);
+
+    /**
+     * @brief sideload Sideloads the provided local ZIP path to the connected device
+     * @param path The path to the ZIP file, on the host computer
+     */
+    void sideload(const QString& path);
 
     void timerEvent(QTimerEvent* evt);
 signals:

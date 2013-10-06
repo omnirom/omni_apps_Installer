@@ -2,8 +2,10 @@
 #define FLASHINGDIALOG_H
 
 #include <QDialog>
+#include <QNetworkReply>
 
 class BundleBuild;
+class FlashScenario;
 
 namespace Ui {
 class FlashingDialog;
@@ -17,15 +19,14 @@ public:
     explicit FlashingDialog(BundleBuild* build, QWidget *parent = 0);
     ~FlashingDialog();
 
-    void timerEvent(QTimerEvent *);
-
 private slots:
-
+    void onBuildDownloaded(QNetworkReply*);
+    void onRecoveryDownloaded(QNetworkReply*);
 
 private:
     Ui::FlashingDialog *ui;
     BundleBuild* mBuildToFlash;
-    int mWarmupId;
+    FlashScenario* mScenario;
 };
 
 #endif // FLASHINGDIALOG_H

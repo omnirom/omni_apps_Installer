@@ -160,7 +160,7 @@ void AdbMonitor::onAdbDevicesReadyReadStdOut()
 //----------------------------------------------
 void AdbMonitor::onAdbDevicesReadyReadStdErr()
 {
-
+    qDebug() << mMonitorProcess->readAllStandardError();
 }
 //----------------------------------------------
 void AdbMonitor::processAdbDevice(const QString &serial, const QString &deviceLine)
@@ -226,18 +226,43 @@ AdbDevice* AdbMonitor::findDevice(const QString &serial)
     return NULL;
 }
 //----------------------------------------------
+bool AdbMonitor::hasDeviceConnected()
+{
+    return mDevices.size() > 0;
+}
+//----------------------------------------------
 void AdbMonitor::pullFile(const QString &remotePath,
                           const QString &localPath,
                           const QString &deviceSerial)
 {
-
+    Q_UNUSED(remotePath);
+    Q_UNUSED(localPath);
+    Q_UNUSED(deviceSerial);
+    qDebug() << "Unimplemented method pullFile";
 }
 //----------------------------------------------
 void AdbMonitor::pushFile(const QString &srcPath,
                           const QString &destPath,
                           const QString &deviceSerial)
 {
+    Q_UNUSED(srcPath);
+    Q_UNUSED(destPath);
+    Q_UNUSED(deviceSerial);
+    qDebug() << "Unimplemented method pushFile";
+}
+//----------------------------------------------
+void AdbMonitor::shell(const QString &parameters, bool blocking)
+{
+    QProcess* proc = new QProcess(this);
+    QString program = Utils::getBundlePath() + ADB_BINARY;
+    QStringList args;
+    args << "shell" << QString("'" + parameters + "'");
+    proc->start(program, args);
 
+    if (blocking && !proc->waitForFinished(10000))
+    {
+        qDebug() << "Timed out waiting for shell command";
+    }
 }
 //----------------------------------------------
 void AdbMonitor::reboot(const QString &destination)
@@ -252,5 +277,21 @@ void AdbMonitor::reboot(const QString &destination)
     {
         qDebug() << "Timed out waiting for adb reboot " << destination;
     }
+}
+//----------------------------------------------
+void AdbMonitor::sideload(const QString &path)
+{
+    QProcess* proc = new QProcess(this);
+    QString program = Utils::getBundlePath() + ADB_BINARY;
+    QStringList args;
+    args << "sideload" << path;
+    proc->start(program, args);
+
+    if (!proc->waitForFinished(120000))
+    {
+        qDebug() << "Timed out (120s) waiting for adb sideload " << path;
+    }
+
+    qDebug() << proc->readAllStandardOutput();
 }
 //----------------------------------------------

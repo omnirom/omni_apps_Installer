@@ -30,6 +30,10 @@ struct ScenarioData
     ScenarioStep unlockStep;
     // Data for recovery flashing step
     ScenarioStep recoveryStep;
+    // Remote path for recovery image
+    QString recoveryUrl;
+    // Local path
+    QString recoveryLocalPath;
 };
 
 class FlashScenario : public QObject
@@ -57,19 +61,22 @@ public:
     /**
      * @brief flash flashes the provided BundleBuild to the currently connected device
      * @param build The build to flash
+     * @param files The path to the local files to flash
      * @return true if success, false otherwise
      */
-    bool flash(BundleBuild* build);
+    bool flash(BundleBuild* build, const QStringList& files);
+
+    /**
+     * @brief getScenarioData returns the data of the currently loaded scenario
+     * @return  A pointer to the data, or NULL if no scenario loaded (@see loadForDevice)
+     */
+    ScenarioData* getScenarioData() const { return mScenario; }
 
 private slots:
-    // Slot to call when the initial reboot has been initiated
-    void onFlashStep_InitialReboot();
     // Slot to call when unlock step is ready to be performed
     void onFlashStep_UnlockReady();
     // Slot to call when unlock is complete
-    void onFlashStep_UnlockComplete(QString);
-    // Slot to call when post-unlock reboot has been initiated
-    void onFlashStep_PostUnlockReboot();
+    void onFlashStep_UnlockComplete();
     // Slot to call when recovery step is ready to be performed
     void onFlashStep_RecoveryReady();
     // Slot to call when recovery flash/boot is complete
@@ -84,6 +91,8 @@ protected:
     AbstractStep* getStepFromType(const QString& type);
 
     ScenarioData* mScenario;
+    BundleBuild* mBuild;
+    QStringList mFiles;
 };
 
 #endif // FLASHSCENARIO_H

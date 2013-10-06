@@ -4,7 +4,7 @@
 
 //------------------------------------------------------
 AbstractStep::AbstractStep(QObject *parent) :
-    QObject(parent), mProcess(NULL)
+    QObject(parent), mProcess(NULL), mPrepared(false)
 {
     mProcess = new QProcess(this);
     connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(onStdOut()));
@@ -20,6 +20,11 @@ void AbstractStep::onStdOut()
 void AbstractStep::onStdErr()
 {
     mProcessStdOut.append(mProcess->readAllStandardError());
+}
+//------------------------------------------------------
+void AbstractStep::runStep(const QStringList &commands)
+{
+    mCommands = commands;
 }
 //------------------------------------------------------
 void AbstractStep::onProcessFinished(int exitCode)

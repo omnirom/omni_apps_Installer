@@ -12,18 +12,19 @@ public:
 
     /**
      * @brief runStep runs the step that is provided by this class. In AbstractStep, it is a virtual
-     * method so it must be overriden by children classes to actually run the required command.
+     * method so it must be overriden by children classes to actually run the required command, but
+     * this one must be called to save commands in mCommands.
      * A subset of command can be passed (ie. parameters) in the commands stringlist parameter.
      *
      * @param commands A list of subcommands this step should run
      */
-    virtual void runStep(const QStringList& commands) = 0;
+    virtual void runStep(const QStringList& commands);
 
 signals:
     /**
-     * @brief stepStarted Signal sent when the step has been started (ie. the method is running)
+     * @brief stepPrepared Signal sent when the step has been prepared (e.g. rebooted to fastboot)
      */
-    void stepStarted();
+    void stepPrepared();
 
     /**
      * @brief stepEnded Signal sent when the step has successfully finished
@@ -48,6 +49,12 @@ public slots:
     virtual void onStdErr();
 
     /**
+     * @brief onStepPrepared Called when the process has prepared the device, e.g. it rebooted
+     * in fastboot mode.
+     */
+    virtual void onStepPrepared() = 0;
+
+    /**
      * @brief onProcessFinished Called when the process exits
      */
     virtual void onProcessFinished(int exitCode);
@@ -56,6 +63,8 @@ protected:
     QProcess* mProcess;
     QString mProcessStdOut;
     QString mProcessStdErr;
+    bool mPrepared;
+    QStringList mCommands;
 };
 
 #endif // ABSTRACTSTEP_H

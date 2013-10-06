@@ -8,9 +8,12 @@ class NullStep : public AbstractStep
     Q_OBJECT
 
 public:
-    NullStep();
+    NullStep(QObject* parent = 0);
 
     void runStep(const QStringList &commands);
+
+public slots:
+    void onStepPrepared();
 };
 
 #endif // NULLSTEP_H

@@ -52,12 +52,14 @@ void FastbootMonitor::onMonitorStdOut()
     {
         if (mDeviceSerial != "")
         {
+            qDebug() << "Fastboot device removed";
             mDeviceSerial = "";
             emit onFastbootOffline();
         }
     }
     else
     {
+        qDebug() << "Fastboot device online";
         QStringList splitData = data.split("\t");
         QString deviceSerial = splitData[0];
 

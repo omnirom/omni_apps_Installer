@@ -12,10 +12,9 @@ public:
 
     void runStep(const QStringList &commands);
 
-signals:
-
-
-
+public slots:
+    void onStepPrepared();
+    void onProcessFinished(int exitCode);
 };
 
 #endif // FASTBOOTSTEP_H

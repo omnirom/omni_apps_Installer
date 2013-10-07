@@ -18,6 +18,8 @@ FlashingDialog::FlashingDialog(BundleBuild* build, QWidget *parent) :
 
     mScenario = new FlashScenario();
 
+    ui->lblSubTitle->setText("Downloading build...");
+
     // Download the build for a start
     HttpClient* cli = new HttpClient(this);
     connect(cli, SIGNAL(onDownloadFinished(QNetworkReply*)),
@@ -44,6 +46,9 @@ void FlashingDialog::onBuildDownloaded(QNetworkReply *reply)
         return;
     }
 
+    ui->lblSubTitle->setText("Writing build to HDD...");
+    qApp->processEvents();
+
     qDebug() << "Writing update zip to " << path;
     writer.write(reply->readAll());
     writer.close();
@@ -53,8 +58,11 @@ void FlashingDialog::onBuildDownloaded(QNetworkReply *reply)
     connect(cli, SIGNAL(onDownloadFinished(QNetworkReply*)),
             this, SLOT(onRecoveryDownloaded(QNetworkReply*)));
 
-    qDebug() << "Downloading recovery...";
+    ui->lblSubTitle->setText("Downloading recovery...");
+    qApp->processEvents();
+
     mScenario->loadForDevice(mBuildToFlash->getDevice());
+    qDebug() << "Downloading recovery... " << mScenario->getScenarioData()->recoveryUrl;
     cli->downloadUrl(mScenario->getScenarioData()->recoveryUrl);
 }
 //----------------------------------------
@@ -71,6 +79,9 @@ void FlashingDialog::onRecoveryDownloaded(QNetworkReply *reply)
         return;
     }
 
+    ui->lblSubTitle->setText("Writing recovery to HDD...");
+    qApp->processEvents();
+
     qDebug() << "Writing recovery img to " << path;
     writer.write(reply->readAll());
     writer.close();
@@ -80,6 +91,9 @@ void FlashingDialog::onRecoveryDownloaded(QNetworkReply *reply)
     // And off we go!
     QStringList zipFiles;
     zipFiles << romPath;
+
+    ui->lblSubTitle->setText("Flashing...");
+    qApp->processEvents();
 
     if (!mScenario->flash(mBuildToFlash, zipFiles))
     {

@@ -65,6 +65,7 @@ protected:
     QString mProcessStdErr;
     bool mPrepared;
     QStringList mCommands;
+    int mCurrentCommand;
 };
 
 #endif // ABSTRACTSTEP_H

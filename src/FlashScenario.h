@@ -85,6 +85,8 @@ private slots:
     void onFlashStep_InitialAdbReady();
     // Slot to call when sideload ADB step is up
     void onFlashStep_SideloadAdbReady();
+    // Slot to call when sideload is complete and ADB is back up
+    void onFlashStep_SideloadComplete();
 
 protected:
     void loadDeviceScenario(QVariantMap data);

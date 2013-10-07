@@ -9,6 +9,7 @@
 
 #include <QFile>
 #include <QMessageBox>
+#include <QApplication>
 
 //-------------------------------------------------
 FlashScenario::FlashScenario(QObject *parent) :
@@ -91,7 +92,7 @@ void FlashScenario::loadDeviceScenario(QVariantMap data)
     QVariantMap j_recovery = data["recovery"].toMap();
 
     mScenario->device = data["device"].toString();
-    mScenario->recoveryUrl = data["recovery"].toString();
+    mScenario->recoveryUrl = data["recoveryImage"].toString();
     mScenario->unlockStep.method = getStepFromType(j_unlock["method"].toString());
     mScenario->unlockStep.commands = j_unlock["commands"].toStringList();
     mScenario->recoveryStep.method = getStepFromType(j_recovery["method"].toString());
@@ -171,7 +172,7 @@ void FlashScenario::onFlashStep_UnlockComplete()
     QStringList filledCommands = mScenario->recoveryStep.commands;
     filledCommands.replaceInStrings("%1", mScenario->recoveryLocalPath);
 
-    mScenario->recoveryStep.method->runStep(mScenario->recoveryStep.commands);
+    mScenario->recoveryStep.method->runStep(filledCommands);
 }
 //-------------------------------------------------
 void FlashScenario::onFlashStep_RecoveryReady()
@@ -209,11 +210,14 @@ void FlashScenario::onFlashStep_InitialAdbReady()
     // we do is that we write the command NOW to /cache, and kill the recovery to make it go into
     // sideload mode.
     AdbMonitor* am = AdbMonitor::getDefault();
+    disconnect(am, SIGNAL(onDeviceConnected(AdbDevice*)), this, SLOT(onFlashStep_InitialAdbReady()));
 
     // We write the command to /cache
+    qDebug() << "Doing sideload cache command";
     am->shell("echo \"sideload\" > /cache/recovery/openrecoveryscript", true);
 
     // We kill the recovery to reload it, and make it read our command file
+    qDebug() << "Killing recovery to start in sideload mode";
     am->shell("killall recovery", true);
 
     onFlashStep_SideloadAdbReady();
@@ -231,5 +235,19 @@ void FlashScenario::onFlashStep_SideloadAdbReady()
     }
 
     qDebug() << "Sideloaded all files";
+
+    // Try to reboot the device once sideload is done
+    // We wait for device to exit sideload mode
+    connect(am, SIGNAL(onDeviceConnected(AdbDevice*)), this, SLOT(onFlashStep_SideloadComplete()));
 }
+//-------------------------------------------------
+void FlashScenario::onFlashStep_SideloadComplete()
+{
+    AdbMonitor* am = AdbMonitor::getDefault();
+    disconnect(am, SIGNAL(onDeviceConnected(AdbDevice*)), this, SLOT(onFlashStep_SideloadComplete()));
+
+    qDebug() << "Rebooting to system";
+    am->reboot();
+}
+
 //-------------------------------------------------

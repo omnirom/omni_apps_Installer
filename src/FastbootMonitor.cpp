@@ -43,6 +43,11 @@ void FastbootMonitor::stopMonitoring()
     }
 }
 //------------------------------------------
+bool FastbootMonitor::isDeviceOnline()
+{
+    return mDeviceSerial != "";
+}
+//------------------------------------------
 void FastbootMonitor::onMonitorStdOut()
 {
     // NOTE: we only support ONE fastboot device at a time here!!

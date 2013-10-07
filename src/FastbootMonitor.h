@@ -17,6 +17,7 @@ public:
     void startMonitoring();
     void stopMonitoring();
     void timerEvent(QTimerEvent *evt);
+    bool isDeviceOnline();
 
 signals:
     void onFastbootOnline();

@@ -1,11 +1,11 @@
 [
 {
     "device":"mako",
-
+    "recoveryImage":"http://xplod.fr/test_oi/openrecovery-twrp-2.6.3.0-mako.img",
 
     "unlock":{
         "method":"fastboot",
-        "commands":["oem", "unlock"]
+        "commands":["oem unlock"]
     },
 
     "recovery":{
@@ -15,7 +15,7 @@
 },
 {
     "device":"find5",
-    "recovery":"http://xplod.fr/test_oi/openrecovery-twrp-2.6.3.0-find5.img",
+    "recoveryImage":"http://xplod.fr/test_oi/openrecovery-twrp-2.6.3.0-find5.img",
 
     "unlock":{
         "method":"fastboot",

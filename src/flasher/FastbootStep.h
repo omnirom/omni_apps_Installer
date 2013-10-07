@@ -11,6 +11,7 @@ public:
     explicit FastbootStep(QObject *parent = 0);
 
     void runStep(const QStringList &commands);
+    void runNextCommand();
 
 public slots:
     void onStepPrepared();

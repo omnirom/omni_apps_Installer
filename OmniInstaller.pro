@@ -75,7 +75,8 @@ FORMS    += \
     ui/welcomedialog.ui \
     ui/chooserdialog.ui \
     ui/romlistdialog.ui \
-    ui/flashingdialog.ui
+    ui/flashingdialog.ui \
+    ui/finishdialog.ui
 
 RESOURCES += \
     resources.qrc

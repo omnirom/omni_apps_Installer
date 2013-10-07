@@ -191,6 +191,7 @@ void AdbMonitor::processAdbDevice(const QString &serial, const QString &deviceLi
     {
         // A device arrived in recovery mode
         device->setState(ADB_DEVICE_STATE_RECOVERY);
+        device->dump();
         emit onDeviceConnected(device);
     }
     else if (deviceLine.startsWith("device") && device->getState() != ADB_DEVICE_STATE_ONLINE)
@@ -210,10 +211,9 @@ void AdbMonitor::processAdbDevice(const QString &serial, const QString &deviceLi
             else qDebug() << "Unknown key: " << key;
         }
 
+        device->dump();
         emit onDeviceConnected(device);
     }
-
-    device->dump();
 }
 //----------------------------------------------
 AdbDevice* AdbMonitor::findDevice(const QString &serial)
@@ -256,13 +256,16 @@ void AdbMonitor::shell(const QString &parameters, bool blocking)
     QProcess* proc = new QProcess(this);
     QString program = Utils::getBundlePath() + ADB_BINARY;
     QStringList args;
-    args << "shell" << QString("'" + parameters + "'");
+    args << "shell" << parameters;
     proc->start(program, args);
 
     if (blocking && !proc->waitForFinished(10000))
     {
         qDebug() << "Timed out waiting for shell command";
     }
+
+    qDebug() << proc->readAllStandardOutput();
+    qDebug() << proc->readAllStandardError();
 }
 //----------------------------------------------
 void AdbMonitor::reboot(const QString &destination)
@@ -281,17 +284,46 @@ void AdbMonitor::reboot(const QString &destination)
 //----------------------------------------------
 void AdbMonitor::sideload(const QString &path)
 {
-    QProcess* proc = new QProcess(this);
-    QString program = Utils::getBundlePath() + ADB_BINARY;
-    QStringList args;
-    args << "sideload" << path;
-    proc->start(program, args);
+    bool success = false;
 
-    if (!proc->waitForFinished(120000))
+    while (!success)
     {
-        qDebug() << "Timed out (120s) waiting for adb sideload " << path;
-    }
+        QProcess* proc = new QProcess(this);
+        QString program = Utils::getBundlePath() + ADB_BINARY;
+        QStringList args;
+        args << "sideload" << path;
+        proc->start(program, args);
 
-    qDebug() << proc->readAllStandardOutput();
+        if (!proc->waitForFinished(120000))
+        {
+            qDebug() << "Timed out (120s) waiting for adb sideload " << path;
+        }
+
+        QString stdErr = proc->readAllStandardError();
+        QString stdOut = proc->readAllStandardOutput();
+        //qDebug() << stdErr;
+
+        if (stdErr.contains("error: closed"))
+        {
+            // Sideload mode is not yet started
+            //qDebug() << "sideload not ready yet";
+        }
+        else if (stdErr.contains("error: device not found"))
+        {
+            // Device not yet ready
+        }
+        else if (stdOut.contains("sending:"))
+        {
+            qDebug() << "sideload done";
+            success = true;
+            break;
+        }
+        else
+        {
+            // unknown message
+            qDebug() << stdErr;
+            qDebug() << stdOut;
+        }
+    }
 }
 //----------------------------------------------

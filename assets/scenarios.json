@@ -1,7 +1,7 @@
 [
 {
     "device":"mako",
-    "recoveryImage":"http://xplod.fr/test_oi/openrecovery-twrp-2.6.3.0-mako.img",
+    "recoveryImage":"http://localhost/omni/openrecovery-twrp-2.6.3.0-mako.img",
 
     "unlock":{
         "method":"fastboot",
@@ -15,7 +15,7 @@
 },
 {
     "device":"find5",
-    "recoveryImage":"http://xplod.fr/test_oi/openrecovery-twrp-2.6.3.0-find5.img",
+    "recoveryImage":"http://localhost/omni/openrecovery-twrp-2.6.3.0-find5.img",
 
     "unlock":{
         "method":"fastboot",
@@ -24,7 +24,7 @@
 
     "recovery":{
         "method":"fastboot",
-        "commands":["reboot"]
+        "commands":["flash recovery %1", "boot %1"]
     }
 }
 ]

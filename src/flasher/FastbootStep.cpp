@@ -49,6 +49,12 @@ void FastbootStep::onStepPrepared()
 //------------------------------------------------
 void FastbootStep::runNextCommand()
 {
+    if (mCurrentCommand >= mCommands.size())
+    {
+        emit stepEnded("");
+        return;
+    }
+
     QString program = Utils::getBundlePath() + FASTBOOT_BINARY;
     QStringList commands = mCommands[mCurrentCommand].split(" ");
     mCurrentCommand++;
